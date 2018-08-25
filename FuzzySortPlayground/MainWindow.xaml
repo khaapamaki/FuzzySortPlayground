@@ -5,8 +5,539 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FuzzySortPlayground"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="FuzzySorter Playground"
+        Height="700"
+        Width="1000">
+  <Grid x:Name="FullArea">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="180" />
+    </Grid.ColumnDefinitions>
+    <Grid x:Name="MainArea"
+          Margin="0,0,0,0"
+          Grid.Column="0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="50" />
+        <RowDefinition Height="Auto"
+                       MinHeight="100" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+      <StackPanel Background="#f0f0f0"
+                  Grid.Row="0">
+        <Grid x:Name="InputArea"
+              Margin="0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="40" />
+          </Grid.ColumnDefinitions>
+          <TextBox x:Name="InputListTextBox"
+                   Grid.Column="0"
+                   HorizontalAlignment="Stretch"
+                   Height="23"
+                   Margin="10,16,5,16"
+                   TextWrapping="NoWrap"
+                   Text=""
+                   VerticalAlignment="Top"
+                   TextChanged="InputListField_TextChanged"
+                   LostFocus="InputListField_LostFocus" />
+          <Button x:Name="RandomizeButton"
+                  Grid.Column="1  "
+                  Margin="0,10,10,10"
+                  Content="Rnd"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center" />
+        </Grid>
+      </StackPanel>
+
+      <Grid x:Name="QuickResult"
+            Background="#f0f0f0"
+            Grid.Row="1"
+            MinHeight="100"
+            VerticalAlignment="Top"
+            Margin="0">
+
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="SourceArea"
+              Background="#e0f0f0"
+              Margin="10,5,10,5"
+              Height="Auto"
+              MinHeight="44"
+              Grid.Row="0">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="15" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <Label Content="Source"
+                 Grid.Row="0"
+                 Foreground="Black"
+                 Padding="0"
+                 Margin="0"
+                 FontSize="11" />
+          <WrapPanel x:Name="OriginalView"
+                     Grid.Row="1">
+            <!-- original list will be inserted here -->
+          </WrapPanel>
+        </Grid>
+
+        <Grid x:Name="ResultArea"
+              Background="#f0e0f0"
+              Margin="10,5,10,10"
+              Height="Auto"
+              MinHeight="44"
+              Grid.Row="1">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="15" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <Label Content="Result"
+                 Grid.Row="0"
+                 Foreground="Black"
+                 Padding="0"
+                 Margin="0"
+                 FontSize="11" />
+
+          <WrapPanel x:Name="ResultView"
+                     Grid.Row="1">
+            <!-- result list will be inserted here -->
+          </WrapPanel>
+        </Grid>
+
+        <!--<Separator />-->
+
+      </Grid>
+
+      <Grid Grid.Row="2"
+            VerticalAlignment="Stretch"
+            Background="White"
+            Margin="0,0,0,0">
+        <StackPanel x:Name="AnalyzerPanel"
+                    Grid.Row="2"
+                    VerticalAlignment="Stretch"
+                    Margin="0">
+          <Separator />
+
+        </StackPanel>
+      </Grid>
+
     </Grid>
+
+    <StackPanel x:Name="OptionPanel"
+                Margin="0,0,0,0"
+                Background="#f8f8f8"
+                Grid.Column="1">
+      <Grid x:Name="OrderInfo"
+            Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="OriginalOrderTitleLabel"
+               Grid.Row="0"
+               Content="Original Order"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <Label x:Name="OriginalOrderValueLabel"
+               Grid.Row="1"
+               Grid.Column="0"
+               Content="Ascending"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               FontSize="12"
+               Margin="20,0,5,5"
+               Padding="0" />
+      </Grid>
+      <Grid x:Name="TrendInfo" Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition> 
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="4*"></ColumnDefinition>
+          <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="TrendTitleLabel"
+               Grid.Row="0"
+               Content="Trend"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <Label x:Name="TrendValueLabel"
+               Grid.Row="1"
+               Grid.Column="0"
+               Content="1.0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               FontSize="12"
+               Margin="20,0,5,5"
+               Padding="0" />
+        <TextBox x:Name="TrendThresholdTextBox"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 VerticalAlignment="Top"
+                 Margin="5,5,10,5"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+      <Grid x:Name="SlopeInfo"
+            Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="4*"></ColumnDefinition>
+          <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="SlopeTitleLabel"
+               Grid.Row="0"
+               Content="Slope"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <Label x:Name="SlopeValueLabel"
+               Grid.Row="1"
+               Grid.Column="0"
+               Content="1.0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               FontSize="12"
+               Margin="20,0,5,5"
+               Padding="0" />
+        <TextBox x:Name="SlopeThresholdTextBox"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 VerticalAlignment="Top"
+                 Margin="5,5,10,5"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+      <Grid x:Name="QualityInfo">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="120"></ColumnDefinition>
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label x:Name="QualityTitleLabel"
+               Grid.Row="0"
+               Content="Quality"
+               HorizontalAlignment="Left"
+               FontSize="10"
+               Margin="10,1,0,0"
+               Padding="0" />
+        <Label x:Name="QualityValueLabel"
+               Grid.Row="1"
+               Grid.Column="0"
+               Content="1.0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               FontSize="12"
+               Margin="20,0,5,5"
+               Padding="0" />
+        <TextBox x:Name="QualityThresholdTextBox"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 VerticalAlignment="Top"
+                 Margin="5,5,10,5"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+      <Grid x:Name="EQInfo">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="4*"></ColumnDefinition>
+          <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="EQTitleLabel"
+               Grid.Row="0"
+               Content="Evaluation Quality"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <Label x:Name="EQValueLabel"
+               Grid.Row="1"
+               Grid.Column="0"
+               Content="1.0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               FontSize="12"
+               Margin="20,0,5,5"
+               Padding="0" />
+        <TextBox x:Name="EQThresholdTextBox"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 VerticalAlignment="Top"
+                 Margin="5,5,10,5"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+
+      <Grid x:Name="OrderDropDown">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="OrderTitleLabel"
+               Grid.Row="0"
+               Content="Order"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <ComboBox x:Name="OrderComboBox"
+                  VerticalAlignment="Top"
+                  Margin="20,5,10,5"
+                  Height="20"
+                  Grid.Row="1"
+                  Padding="10,1,10,1"
+                  SelectedIndex="0"
+                  SelectionChanged="OrderComboBox_SelectionChanged">
+          <ListBoxItem Content="Ascending" />
+          <ListBoxItem Content="Decending" />
+        </ComboBox>
+        <CheckBox x:Name="ReverseCheckBox"
+                  Grid.Row="2"
+                  Content="Reverse Order Detection"
+                  FontSize="10"
+                  Margin="20,5,10,5"
+                  IsChecked="False"
+                  Checked="ReverseCheckBox_Checked"
+                  Unchecked="ReverseCheckBox_Unchecked" />
+      </Grid>
+      <Grid x:Name="UnsortableDropDown">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="35"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="UnsortableTitleLabel"
+               Grid.Row="0"
+               Content="Sort Unsortables"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <ComboBox x:Name="UnsortableComboBox"
+                  VerticalAlignment="Top"
+                  Margin="20,5,10,10"
+                  Height="20"
+                  Grid.Row="1"
+                  Padding="10,1,10,1"
+                  SelectedIndex="1"
+                  SelectionChanged="UnsortableComboBox_SelectionChanged">
+          <ListBoxItem Content="First" />
+          <ListBoxItem Content="Last" />
+        </ComboBox>
+      </Grid>
+      <StackPanel x:Name="OtherOptions">
+
+        <Label x:Name="OtherOptionsTitle"
+               Grid.Row="0"
+               Content="Other Options"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0"
+               Visibility="Collapsed" />
+
+        <CheckBox x:Name="ReverseCheckBox1"
+                  Grid.Row="2"
+                  Content="Something"
+                  FontSize="10"
+                  Margin="20,5,10,5"
+                  Visibility="Collapsed" />
+        <CheckBox x:Name="ReverseCheckBox2"
+                  Grid.Row="3"
+                  Content="Something"
+                  FontSize="10"
+                  Margin="20,5,10,5"
+                  Visibility="Collapsed" />
+
+      </StackPanel>
+
+      <Grid x:Name="LowLimitInput">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="LowLimitTitleLabel"
+               Grid.Row="0"
+               Content="Low Limit"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <TextBox x:Name="LowLimitTextBox"
+                 Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 Text=""
+                 VerticalAlignment="Center"
+                 Margin="20,5,10,5"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+      <Grid x:Name="HighLimitInput">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="HighLimitTitleLabel"
+               Grid.Row="0"
+               Content="High Limit"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,0,0"
+               Padding="0" />
+        <TextBox x:Name="HighLimitTextBox"
+                 Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 Text=""
+                 VerticalAlignment="Center"
+                 Margin="20,5,10,5"
+                 Padding="0"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+      <Grid x:Name="RangeInput">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="RangeTitleLabel"
+               Grid.Row="0"
+               Content="Max Range"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <TextBox x:Name="RangeTextBox"
+                 Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 Text=""
+                 VerticalAlignment="Center"
+                 Margin="20,5,10,5"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+      <Grid x:Name="DeviationInput">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="DeviationTitleLabel"
+               Grid.Row="0"
+               Content="Max Deviation"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,0,0"
+               Padding="0" />
+        <TextBox x:Name="DeviationTextBox"
+                 Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                 Height="20"
+                 Grid.RowSpan="2"
+                 TextWrapping="NoWrap"
+                 Text=""
+                 VerticalAlignment="Center"
+                 Margin="20,5,10,5"
+                 Padding="0"
+                 TextChanged="TextBox_TextChanged"
+                 LostFocus="TextBox_LostFocus" />
+      </Grid>
+
+      <Grid x:Name="ExceedingDropDown">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="35"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="ExceedingTitleLabel"
+               Grid.Row="0"
+               Content="Handle Exceeding Items"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+        <ComboBox x:Name="ExceedingComboBox"
+                  VerticalAlignment="Top"
+                  Margin="20,5,10,10"
+                  Height="20"
+                  Grid.Row="1"
+                  Padding="10,1,10,1"
+                  SelectedIndex="0"
+                  SelectionChanged="ExceedingComboBox_SelectionChanged">
+          <ListBoxItem Content="Ignore In Evaluation" />
+          <ListBoxItem Content="As Unsortables" />
+
+        </ComboBox>
+      </Grid>
+      <Grid x:Name="OptionTemplate"
+            Visibility="Hidden">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="14"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="templateitemname"
+               Grid.Row="0"
+               Content="Title"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               FontSize="10"
+               Margin="10,0,5,0"
+               Padding="0" />
+      </Grid>
+
+    </StackPanel>
+  </Grid>
+
 </Window>
