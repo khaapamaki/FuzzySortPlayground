@@ -8,7 +8,6 @@ namespace FuzzySortPlayground
 {
     static class DataParser
     {
-        
         static public List<ListItem> ParseListString(string textField)
         {
             textField = textField.Trim().Replace(',', ' ').Replace(';', ' ');
@@ -17,8 +16,7 @@ namespace FuzzySortPlayground
             List<ListItem> result = new List<ListItem>(components.Length);
             foreach (string component in components) {
                 if (component != "") {
-                    ListItem newItem = new ListItem();
-                    newItem.TextValue = component;
+                    var newItem = new ListItem {TextValue = component};
                     result.Add(newItem);
                 }
             }
@@ -45,9 +43,9 @@ namespace FuzzySortPlayground
             if (!Double.TryParse(str, out result)) {
                 result = defaultValue;
             }
-            if (result < 0) {
-                    int stop = 1;
-            }
+//            if (result < 0) {
+//                    var stop = 1;
+//            }
             return result;
         }
 
@@ -60,10 +58,9 @@ namespace FuzzySortPlayground
             } else {
                 result = testParse;
             }
-            if (result < 0) {
-                int stop = 1;
-            }
-
+//            if (result < 0) {
+//                var stop = 1;
+//            }
             return result;
         }
     }
