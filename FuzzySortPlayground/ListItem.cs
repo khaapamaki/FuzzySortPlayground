@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FuzzySortLib;
+﻿using FuzzySortLib;
 
 namespace FuzzySortPlayground
 {
@@ -36,11 +31,9 @@ namespace FuzzySortPlayground
             bool negative = textField.StartsWith("-");
             if (negative)
                 textField = textField.Substring(1);
-            double doubleValue;
-            if (double.TryParse(textField, out doubleValue))
+            if (double.TryParse(textField, out var doubleValue))
                 return doubleValue * (negative ? -1 : 1);
-            else
-                return null;
+            return null;
         }
     }
 }
